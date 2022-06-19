@@ -1,7 +1,7 @@
 #pragma once
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 
 struct FileHeader {
     short bfType;
@@ -33,27 +33,24 @@ struct ColorsRGB {
 
 int main(int arc, char *argv[]) {
 
-  FILE* f = fopen(argv[1], "rb");
+    FILE *f = fopen(argv[1], "rb");
 
-    if (f == nullptr)
-    {
+    if (f == nullptr) {
         printf("\n\n Can't open the file");
         return -1;
-    }
-    else
-    {
+    } else {
         printf("\n\n File f opened!");
     }
 
-  FILE *w = fopen("../test.bmp", "wb");
-  if (w == nullptr) {
-      printf("\n\n Can't open the file");
-      return -1;
-  } else {
-      printf("\n\n File w opened!");
-  }
+    FILE *w = fopen("../test.bmp", "wb");
+    if (w == nullptr) {
+        printf("\n\n Can't open the file");
+        return -1;
+    } else {
+        printf("\n\n File w opened!");
+    }
 
-      fseek(w, 0, SEEK_SET);
+    fseek(w, 0, SEEK_SET);
     fwrite(&File.bfType, sizeof(File.bfType), 1, w);
     fwrite(&File.bfSize, sizeof(File.bfSize), 1, w);
     fwrite(&File.bfReserved1, sizeof(File.bfReserved1), 1, w);
@@ -76,18 +73,17 @@ int main(int arc, char *argv[]) {
     fseek(w, sizeof(File.bfOffBits), SEEK_SET);
 
     int bmpImg;
-    for (int i = File.bfOffBits; i < File.bfSize; i++)
-    {
+    for (int i = File.bfOffBits; i < File.bfSize; i++) {
         fseek(f, i, SEEK_SET);
         fseek(w, i, SEEK_SET);
         fread(&bmpImg, 3, 1, f);
-        bmpImg = INT_MAX - bmpImg; //Tworzymy negatyw
+        bmpImg = INT_MAX - bmpImg; // Tworzymy negatyw
         fwrite(&bmpImg, 3, 1, w);
     }
 
     printf("\n");
     fclose(f);
     fclose(w);
- 
-  return 1;
+
+    return 1;
 }
